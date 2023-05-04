@@ -1,3 +1,5 @@
+import { Button } from 'primereact/button'
+
 export const Pagination = ({
   activePage,
   count,
@@ -11,42 +13,54 @@ export const Pagination = ({
   return (
     <>
       <div className='pagination'>
-        <button
+        <Button
           style={{ padding: '8px', fontWeight: 'bold' }}
           disabled={activePage === 1}
           onClick={() => setActivePage(1)}
         >
           ⏮️ First
-        </button>
-        <button
+        </Button>
+        <Button
           style={{ padding: '8px', fontWeight: 'bold' }}
           disabled={activePage === 1}
           onClick={() => setActivePage(activePage - 1)}
         >
           ⬅️ Previous
-        </button>
-        <button
+        </Button>
+        <Button
           style={{ padding: '8px', fontWeight: 'bold' }}
           disabled={activePage === totalPages}
           onClick={() => setActivePage(activePage + 1)}
         >
           Next ➡️
-        </button>
-        <button
+        </Button>
+        <Button
           style={{ padding: '8px', fontWeight: 'bold' }}
           disabled={activePage === totalPages}
           onClick={() => setActivePage(totalPages)}
         >
           Last ⏭️
-        </button>
+        </Button>
       </div>
-      <div style={{ fontWeight: 'bold', display: 'flex',justifyContent:"space-between" }}>
-        <p>
-          Page {activePage} of {totalPages}
-        </p>
-        <p>
-          Rows: {beginning === end ? end : `${beginning} - ${end}`} of {count}
-        </p>
+      <div
+        style={{
+          fontWeight: 'bold',
+          display: 'flex',
+          justifyContent: 'space-between'
+        }}
+      >
+        <h3>
+          Page &lt;<span style={{ color: 'red' }}> {activePage}</span> of{' '}
+          <span style={{ color: 'red' }}>{totalPages}</span> &gt;
+        </h3>
+
+        <h3>
+          Rows:{' '}
+          <span style={{ color: 'red' }}>
+            {beginning === end ? end : `${beginning} - ${end}`}
+          </span>{' '}
+          of <span style={{ color: 'red' }}>{count}</span>
+        </h3>
       </div>
     </>
   )

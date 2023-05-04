@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { sortRows, filterRows, paginateRows } from './helpers'
 import { Pagination } from './Pagination'
+import { Button } from 'primereact/button'
 
 export const Table = ({ columns, rows }) => {
   const [activePage, setActivePage] = useState(1)
@@ -9,7 +10,10 @@ export const Table = ({ columns, rows }) => {
   const rowsPerPage = 4
 
   const filteredRows = useMemo(() => filterRows(rows, filters), [rows, filters])
-  const sortedRows = useMemo(() => sortRows(filteredRows, sort), [filteredRows, sort])
+  const sortedRows = useMemo(
+    () => sortRows(filteredRows, sort),
+    [filteredRows, sort]
+  )
   const calculatedRows = paginateRows(sortedRows, activePage, rowsPerPage)
 
   const count = filteredRows.length
@@ -19,12 +23,12 @@ export const Table = ({ columns, rows }) => {
     setActivePage(1)
 
     if (value) {
-      setFilters((prevFilters) => ({
+      setFilters(prevFilters => ({
         ...prevFilters,
-        [accessor]: value,
+        [accessor]: value
       }))
     } else {
-      setFilters((prevFilters) => {
+      setFilters(prevFilters => {
         const updatedFilters = { ...prevFilters }
         delete updatedFilters[accessor]
 
@@ -33,11 +37,14 @@ export const Table = ({ columns, rows }) => {
     }
   }
 
-  const handleSort = (accessor) => {
+  const handleSort = accessor => {
     setActivePage(1)
-    setSort((prevSort) => ({
-      order: prevSort.order === 'asc' && prevSort.orderBy === accessor ? 'desc' : 'asc',
-      orderBy: accessor,
+    setSort(prevSort => ({
+      order:
+        prevSort.order === 'asc' && prevSort.orderBy === accessor
+          ? 'desc'
+          : 'asc',
+      orderBy: accessor
     }))
   }
 
@@ -52,7 +59,7 @@ export const Table = ({ columns, rows }) => {
       <table>
         <thead>
           <tr>
-            {columns.map((column) => {
+            {columns.map(column => {
               const sortIcon = () => {
                 if (column.accessor === sort.orderBy) {
                   if (sort.order === 'asc') {
@@ -66,21 +73,25 @@ export const Table = ({ columns, rows }) => {
               return (
                 <th key={column.accessor}>
                   <span>{column.label}</span>
-                  <button onClick={() => handleSort(column.accessor)}>{sortIcon()}</button>
+                  <button onClick={() => handleSort(column.accessor)}>
+                    {sortIcon()}
+                  </button>
                 </th>
               )
             })}
           </tr>
           <tr>
-            {columns.map((column) => {
+            {columns.map(column => {
               return (
                 <th>
                   <input
                     key={`${column.accessor}-search`}
-                    type="search"
+                    type='search'
                     placeholder={`Search ${column.label}`}
                     value={filters[column.accessor]}
-                    onChange={(event) => handleSearch(event.target.value, column.accessor)}
+                    onChange={event =>
+                      handleSearch(event.target.value, column.accessor)
+                    }
                   />
                 </th>
               )
@@ -88,12 +99,16 @@ export const Table = ({ columns, rows }) => {
           </tr>
         </thead>
         <tbody>
-          {calculatedRows.map((row) => {
+          {calculatedRows.map(row => {
             return (
               <tr key={row.id}>
-                {columns.map((column) => {
+                {columns.map(column => {
                   if (column.format) {
-                    return <td key={column.accessor}>{column.format(row[column.accessor])}</td>
+                    return (
+                      <td key={column.accessor}>
+                        {column.format(row[column.accessor])}
+                      </td>
+                    )
                   }
                   return <td key={column.accessor}>{row[column.accessor]}</td>
                 })}
@@ -116,9 +131,12 @@ export const Table = ({ columns, rows }) => {
       )}
 
       <div>
-        <p>
-          <button onClick={clearAll} style={{padding:"8px",fontWeight:"bold"}}>Refresh</button>
-        </p>
+        <Button
+          onClick={clearAll}
+          style={{ padding: '8px', fontWeight: 'bold' }}
+        >
+          Refresh
+        </Button>
       </div>
     </>
   )
